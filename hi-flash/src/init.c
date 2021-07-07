@@ -3,7 +3,9 @@
 #include "uart.h"
 #include "flash.h"
 
-#define ADDR 0x40000 // tnr 07 Jul 2021  10:55 UTC
+//        0x10040000 // location of CamelForth stored program (ascii)
+//        0x1003D000 // experimental erasure and rewrite from bare metal
+#define ADDR 0x3D000 // tnr 07 Jul 2021  15:16 UTC
 
 static char rbuff[4096];
 static char wbuff[4096];
