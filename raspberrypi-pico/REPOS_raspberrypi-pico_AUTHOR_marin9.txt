@@ -1,0 +1,4 @@
+AUTHOR: Marin Bralić (marin9 on github)
+
+origin	https://github.com/marin9/raspberrypi-pico.git (fetch)
+origin	https://github.com/marin9/raspberrypi-pico.git (push)
