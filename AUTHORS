@@ -2,13 +2,18 @@ wa1tnr/rp2040-bare-metal-sbx-a
 
 AUTHORS:
 
-    Marin Bralić (marin9 on github)
+    CamelForth in C
+    copyright (c) 2016,2017 Bradford J. Rodriguez.
 
-    wa1tnr - minor edits (for own work)
+    Marin Bralić (marin9 on github) - SDK/bare metal programming framework
 
-origin	https://github.com/marin9/raspberrypi-pico.git (fetch)
-origin	https://github.com/marin9/raspberrypi-pico.git (push)
+    wa1tnr - port of CamelForth in C to RP2040 - bare metal approach
 
-Wed Jul  7 11:43:32 UTC 2021
+SDK:
+
+    origin	https://github.com/marin9/raspberrypi-pico.git (fetch)
+    origin	https://github.com/marin9/raspberrypi-pico.git (push)
+
+Wed Jul  7 14:32:36 UTC 2021
 
 END.
