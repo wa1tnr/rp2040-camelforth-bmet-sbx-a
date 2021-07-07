@@ -1,0 +1,29 @@
+ $  git clone git@github.com:wa1tnr/rp2040-bare-metal-sbx-a.git 
+Cloning into 'rp2040-bare-metal-sbx-a'...
+remote: Enumerating objects: 586, done.
+remote: Counting objects: 100% (586/586), done.
+remote: Compressing objects: 100% (242/242), done.
+remote: Total 586 (delta 341), reused 580 (delta 335), pack-reused 0
+Receiving objects: 100% (586/586), 95.76 KiB | 916.00 KiB/s, done.
+Resolving deltas: 100% (341/341), done.
+
+Wed Jul  7 13:33:46 UTC 2021
+
+* main                  aed74aa [origin/main] untested since commit c63d49b4 (approx.)
+  remotes/origin/HEAD   -> origin/main
+  remotes/origin/dvlp-a aed74aa untested since commit c63d49b4 (approx.)
+  remotes/origin/main   aed74aa untested since commit c63d49b4 (approx.)
+
+ $  mv rp2040-bare-metal-sbx-a  rp2040-camelforth-bmet-sbx-a
+
+CamelForth in C by Dr. Brad Rodriguez - for bare arm-none-eabi C compiler.
+
+Upstream for initial work is:
+
+    origin  https://github.com/marin9/raspberrypi-pico.git (fetch)
+
+    Marin Bralić (marin9 on github)
+
+    (bare metal framework, prior to addition of Dr. Rodriguez' Forth)
+
+END.
