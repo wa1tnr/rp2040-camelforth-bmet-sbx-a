@@ -1,3 +1,10 @@
+Thu Jul  8 10:10:29 UTC 2021
+
+Lost status - no reliable information in this (very) file,
+at present (see above timestamp).
+
+Prior (only):
+
 UNTESTED as of:
 
 	commit f4c8f46bd91d5981fa68d89d0d02e43de1174445
