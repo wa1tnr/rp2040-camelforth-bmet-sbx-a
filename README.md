@@ -1,4 +1,8 @@
-# wa1tnr/rp2040-bare-metal-sbx-a
+# wa1tnr/rp2040-camelforth-bmet-sbx-a
+
+CamelForth in C by Dr. Brad Rodriguez (near future attempt to port this).
+
+ - - - - - - - -
 
 Program the Raspberry Pi Pico RP2040 using arm-none-eabi compiler of your choice.
 

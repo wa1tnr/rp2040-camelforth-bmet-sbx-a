@@ -1,0 +1,15 @@
+NOTE: There's an error in this version of CamelForth.
+
+The symptom: the dialog with the Forth interpreter
+fails to respond (at all) and then 'catches up'
+without intervention.
+
+Seems harmless in the short term (can sometimes
+continue to use it; better to simply cycle power).
+
+Here only as a quick testing on-MCU environment
+(Forth interpreter).
+
+This is not (at all) the same UF2 meant to be built
+from this (present) repository (some time in the
+future).  It's a pico-sdk version of CamelForth.
