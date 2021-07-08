@@ -1,0 +1,10 @@
+ $ git clone https://github.com/marin9/raspberrypi-pico.git
+Cloning into 'raspberrypi-pico'...
+remote: Enumerating objects: 563, done.
+remote: Counting objects: 100% (563/563), done.
+remote: Compressing objects: 100% (394/394), done.
+remote: Total 563 (delta 329), reused 394 (delta 160), pack-reused 0
+Receiving objects: 100% (563/563), 90.14 KiB | 802.00 KiB/s, done.
+Resolving deltas: 100% (329/329), done.
+ $ 
+Wed Jul  7 11:32:16 UTC 2021
