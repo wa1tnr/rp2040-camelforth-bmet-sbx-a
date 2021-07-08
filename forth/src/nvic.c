@@ -40,7 +40,7 @@ static void pendsv_handler() {
 }
 
 static void systick_handler() {
-	printf("systick\r\n");
+	// printf("systick\r\n");
 }
 
 
