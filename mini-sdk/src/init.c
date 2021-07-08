@@ -28,6 +28,14 @@ void handler() {
 
 
 
+void signon_msg() {
+        printf("This signon ");
+        printf("message is ");
+        printf("what the cat ");
+        printf("dragged in.\r\n");
+        // model is: // printf("systick\r\n");
+}
+
 void init() {
 	xosc_init();
 	IO_WR(CLOCKS_BASE+0x48, 0x880); // clk_peri enble
@@ -49,6 +57,7 @@ void init() {
 	systick_init();
 	systick_set(12000000-1);
 
+	signon_msg();
 	while(1){
 		printf("M\r\n");
 		delay(5000000);
