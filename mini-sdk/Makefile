@@ -2,7 +2,7 @@ ARMGNU	= arm-none-eabi
 XCPU	= -mcpu=cortex-m0
 AOPS	= --warn --fatal-warnings $(XCPU)
 COPS	= -Wall -Wextra -O2 -ffreestanding $(XCPU) -fpic -mthumb
-LOPS	= -nostdlib -nostartfiles
+LOPS	= -nostartfiles
 UOPS	= #-f -n
 
 MKUF2	= mkuf2
@@ -41,7 +41,7 @@ $(TARGET).bin: $(TARGET).elf
 
 $(TARGET).elf : $(LINKER) $(OBJA) $(OBJC)
 	@echo " Create\t\t" $@
-	@$(ARMGNU)-ld $(LOPS) -T $(LINKER) $(OBJA) $(OBJC) -o $@
+	@$(ARMGNU)-gcc $(COPS) $(LOPS) -T $(LINKER) $(OBJA) $(OBJC) -o $@
 
 $(OBJA): build/%.o : src/%.s $(INC)
 	@echo " Compile\t" $<
