@@ -23,16 +23,16 @@ void handler() {
 	char buff[32];
 	memset(buff, 0, 32);
 	uart_read(0, buff, 32);
-	printf("UART RX: %s\r\n", buff);
+	// printf("UART RX: %s\r\n", buff);
+	printf("%s", buff);
 }
 
 
 
 void signon_msg() {
-        printf("This signon ");
-        printf("message is ");
-        printf("what the cat ");
-        printf("dragged in.\r\n");
+        printf("\r\n\r\n    proto-Forth\r\n\r\n");
+        printf("    This signon message is ");
+        printf("what the cat dragged in.\r\n");
         // model is: // printf("systick\r\n");
 }
 
@@ -59,8 +59,8 @@ void init() {
 
 	signon_msg();
 	while(1){
-		printf("M\r\n");
-		delay(5000000);
+		// printf("M\r\n");
+		// delay(5000000);
 	}
 }
 
