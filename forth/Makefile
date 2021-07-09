@@ -23,8 +23,19 @@ all: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 run: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 	pirun.sh
 
-upload: clean all
+xupload: clean all
 	for index in $(BUILT_UF2) ; do echo $${index} ; \
+	cp -p $${index} $(DEST_DIR) ; \
+	echo $${index} was copied to $(DEST_DIR) ; done
+
+upload: all
+	@sleep 1
+	@echo ' running target' '[0;1;34mmake upload[0m' now
+	@sleep 1
+	@echo -n " [0;1;33;40msleeping 2 seconds.."
+	@sleep 2
+	@echo    ".  Done.[0m"
+	@for index in $(BUILT_UF2) ; do echo -n ' ' ; \
 	cp -p $${index} $(DEST_DIR) ; \
 	echo $${index} was copied to $(DEST_DIR) ; done
 
