@@ -29,7 +29,11 @@ void handler() {
 
 
 
+#define UNIQUE() printf(" UNIQ 327af-32e");
+
 void signon_msg() {
+        UNIQUE();
+        printf("             ");
         printf("\r\n\r\n    proto-Forth\r\n\r\n");
         printf("    This signon message is ");
         printf("what the cat dragged in.\r\n");
@@ -37,8 +41,8 @@ void signon_msg() {
 }
 
 void interpret(void) {
-        printf("Interpret-AA");
-        delay(2500000);
+        // printf("Interpret-AA");
+        // delay(2500000);
 }
 
 void init() {
