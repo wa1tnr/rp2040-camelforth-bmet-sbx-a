@@ -36,6 +36,11 @@ void signon_msg() {
         // model is: // printf("systick\r\n");
 }
 
+void interpret(void) {
+        printf("Interpret-AA");
+        delay(2500000);
+}
+
 void init() {
 	xosc_init();
 	IO_WR(CLOCKS_BASE+0x48, 0x880); // clk_peri enble
@@ -59,6 +64,7 @@ void init() {
 
 	signon_msg();
 	while(1){
+            interpret();
 		// printf("M\r\n");
 		// delay(5000000);
 	}
