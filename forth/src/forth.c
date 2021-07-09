@@ -100,6 +100,12 @@ CODE(exit) {
     xxip = pfa;                   /* fake out the compiler - KLUDGE */
 }
 
+CODE(lit) {
+    *--psp = *(unsigned int*)ip;     /* fetch inline value */
+    ip += CELL;
+    xxip = pfa;                   /* fake out the compiler - KLUDGE */
+}
+
 CODE(cmove) {   /* src dst u -- */
     unsigned char *dst, *src;
     unsigned int u;
@@ -112,19 +118,31 @@ CODE(cmove) {   /* src dst u -- */
 
 PRIMITIVE(exit);
 
+PRIMITIVE(lit);
+
+// 695 PRIMITIVE(cmove);
 PRIMITIVE(cmove);
 
+// 697 THREAD(itod) = { Fcmove };  /* synonym */
 THREAD(itod) = { Fcmove };  /* synonym */
 
+//  716 THREAD(u0) = { Fdouser, LIT(0) };
 THREAD(u0) = { Fdouser, LIT(0) };
 
+//  728 extern const struct Header Hcold;
 extern const struct Header Hcold;
+
+//  730 THREAD(uinit) = { Fdorom,
 
 THREAD(uinit) = { Fdorom,
     LIT(0),  LIT(0),  LIT(10), LIT(0),  // u0 >in base state
     RAMDICT, LIT(0),  LIT(0),  Hcold.nfa,    // dp source latest
     LIT(0),  LIT(0),  ROMDICT, LIT(0) };  // hp lp idp newest
 THREAD(ninit) = { Fdocon, LIT(16*CELL) };
+
+// 869 THREAD(count) = { Fenter, Tdup, Tcharplus, Tswap, Tcfetch, Texit };
+
+// 1207 THREAD(cold) = { Fenter,
 
 THREAD(cold) = { Fenter, Texit, };
 
@@ -135,6 +153,8 @@ THREAD(cold) = { Fenter, Texit, };
 /*
  * INNER INTERPRETER
  */
+
+const char coldprompt[] = "\042CamelForth in C v0.1 - 14 Feb 2016";
 
 void interpreter_inner(void) //  'void interpreter(void)' in upstream - restore that later
 {
@@ -167,6 +187,6 @@ void interpreter_inner(void) //  'void interpreter(void)' in upstream - restore 
 
 #define NULL 0 // KLUDGE
 const struct Header Hexit = {  NULL, Texit, 0, "\004EXIT"  };
-
-HEADER(cold, exit, 0, "\004COLD");
+HEADER(lit, exit, 0, "\003lit");
+HEADER(cold, lit, 0, "\004COLD");
 // END.
