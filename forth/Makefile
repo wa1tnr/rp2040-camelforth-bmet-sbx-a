@@ -23,7 +23,7 @@ all: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 run: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 	pirun.sh
 
-upload:
+upload: clean all
 	for index in $(BUILT_UF2) ; do echo $${index} ; \
 	cp -p $${index} $(DEST_DIR) ; \
 	echo $${index} was copied to $(DEST_DIR) ; done
