@@ -7,7 +7,9 @@ UOPS	= #-f -n
 
 MKUF2	= mkuf2
 LINKER	= memory.ld
-TARGET	= picobin
+TARGET	= forth-picobin-aa
+DEST_DIR = ./local-RPI_RP2
+BUILT_UF2 = $(TARGET).uf2
 
 ASM		= $(wildcard src/*.s)
 SRC 	= $(wildcard src/*.c)
@@ -20,6 +22,11 @@ all: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 
 run: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 	pirun.sh
+
+upload:
+	for index in $(BUILT_UF2) ; do echo $${index} ; \
+	cp -p $${index} $(DEST_DIR) ; \
+	echo $${index} was copied to $(DEST_DIR) ; done
 
 clean :
 		@echo " Clean"
