@@ -89,12 +89,20 @@ void Fenter (void * pfa) {
     ip = pfa;                       /* IP points to thread */
 }
 
+void Fdouser (void * pfa) {
+    unsigned int i;
+    i = *(unsigned int *)pfa;               /* pf holds user var index */
+    *--psp = (unsigned int)(&uservars[i]);  /* stack adrs of user var */
+}
+
 CODE(exit) {
     ip = (void *)(*rsp++);        /* pop IP from return stack */
     xxip = pfa;                   /* fake out the compiler - KLUDGE */
 }
 
 PRIMITIVE(exit);
+
+THREAD(u0) = { Fdouser, LIT(0) };
 
 extern const struct Header Hcold;
 
