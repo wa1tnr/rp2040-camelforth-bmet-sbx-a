@@ -100,7 +100,21 @@ CODE(exit) {
     xxip = pfa;                   /* fake out the compiler - KLUDGE */
 }
 
+CODE(cmove) {   /* src dst u -- */
+    unsigned char *dst, *src;
+    unsigned int u;
+    u = *psp++;
+    dst = (unsigned char *)*psp++;
+    src = (unsigned char *)*psp++;
+    while (u-- > 0) *dst++ = *src++;
+    xxip = pfa;                   /* fake out the compiler - KLUDGE */
+}
+
 PRIMITIVE(exit);
+
+PRIMITIVE(cmove);
+
+THREAD(itod) = { Fcmove };  /* synonym */
 
 THREAD(u0) = { Fdouser, LIT(0) };
 
