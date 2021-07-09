@@ -43,6 +43,16 @@
 #include <stdbool.h>
 #include "forth.h"
 
+// #include "resets.h"
+// #include "gpio.h"
+// #include "uart.h"
+// #include "nvic.h"
+// #include "xosc.h"
+#include "lib.h"
+// #include "systick.h"
+
+extern void delay(int); // init.c
+
 /*
  * DATA STACKS
  * stacks grow downward to allow positive index from psp,rsp
@@ -121,6 +131,8 @@ void interpreter_inner(void) //  'void interpreter(void)' in upstream - restore 
         xt = (void (*)())x;     /* too much casting! */
         w += CELL;
         (*xt)(w);               /* call function w/adrs of word def */
+        printf("yyy");
+        delay(50000);
     }
 }
 

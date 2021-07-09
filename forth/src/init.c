@@ -40,9 +40,12 @@ void signon_msg() {
         // model is: // printf("systick\r\n");
 }
 
+extern void interpreter_inner(void);
+
 void interpret(void) {
-        // printf("Interpret-AA");
-        // delay(2500000);
+        interpreter_inner();
+        printf("Interpret-AA");
+        delay(2500000);
 }
 
 void init() {
