@@ -23,10 +23,6 @@ all: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 run: build $(TARGET).bin $(TARGET).list $(TARGET).uf2
 	pirun.sh
 
-xupload: clean all
-	for index in $(BUILT_UF2) ; do echo $${index} ; \
-	cp -p $${index} $(DEST_DIR) ; \
-	echo $${index} was copied to $(DEST_DIR) ; done
 
 upload: all
 	@sleep 1
@@ -35,9 +31,15 @@ upload: all
 	@echo -n " [0;1;33;40msleeping 2 seconds.."
 	@sleep 2
 	@echo    ".  Done.[0m"
-	@for index in $(BUILT_UF2) ; do echo -n ' ' ; \
-	cp -p $${index} $(DEST_DIR) ; \
-	echo $${index} was copied to $(DEST_DIR) ; done
+	@for index in $(BUILT_UF2) ; \
+	do echo -n ''; \
+	if [ -d local-RPI_RP2 ] ; \
+	then cp -p $${index} $(DEST_DIR) ; \
+	echo $${index} was copied to $(DEST_DIR) ; \
+	else echo ERROR: NO FILES COPIED. ; \
+	echo try \'mkdir ./local-RPI_RP2\' \(or mount the RP2040 target\) ; \
+	fi ; done
+
 
 clean :
 		@echo " Clean"
