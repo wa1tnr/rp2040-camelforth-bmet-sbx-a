@@ -1,0 +1,14 @@
+The 'make upload' target in the Makefile relies on a
+link to the real mount point of RPI_RP2 that is to be
+placed into the local directory.
+
+It is named, here, as ./local-RPI_RP2 which can be any
+other directory (for testing).
+
+Example of testing (if upload is not desired):
+
+ $ mkdir ./test.dir
+ $ ln -s ./test.dir ./local-RPI_RP2
+ $ make upload
+
+END.
