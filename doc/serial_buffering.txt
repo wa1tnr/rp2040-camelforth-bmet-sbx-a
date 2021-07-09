@@ -1,0 +1,26 @@
+
+The UART serial buffering is setup for a 32 byte length buffer.
+
+There are consequences to overflow.
+
+An ascii-xfer upload with a 1 ms inter-char delay is enough to
+keep this program happily reporting what it sees as input on
+the UART.
+
+ $ ascii-xfr -sn -l 5 -c 1 ./thisfile.fs
+ASCII upload of "./thisfile.fs"
+Line delay: 5 ms, character delay 1 ms
+
+A direct paste from one xterm to another is too fast and will
+crash the program, as it is not setup to buffer excess rate
+input on the UART.
+
+Not much effort was put into researching if 64 bytes could be
+used instead of 32 bytes (as already setup).  Tests seemed to
+indicate this would require edits outside the scope of those
+tests, possibly after examining how uart.c is put together.
+
+The tests were limited to altering what 'handler()' uses in the
+provided init.c sub-program (in what is now the 'forth' tree).
+
+END.
