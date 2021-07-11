@@ -46,7 +46,7 @@
 // #include "resets.h"
 // #include "gpio.h"
 // #include "uart.h"
-// #include "nvic.h"
+#include "nvic.h"
 // #include "xosc.h"
 #include "lib.h"
 // #include "systick.h"
@@ -82,8 +82,6 @@ void Fdorom (void * pfa) {
     *--psp = (unsigned int)pfa;
 }
 
-// int pjpjp = 0;
-
 void Fenter (void * pfa) {
     *--rsp = (unsigned int)ip;      /* push old IP on return stack */
     ip = pfa;                       /* IP points to thread */
@@ -100,12 +98,20 @@ CODE(exit) {
     xxip = pfa;                   /* fake out the compiler - KLUDGE */
 }
 
+// 155 CODE(lit) {
 CODE(lit) {
     *--psp = *(unsigned int*)ip;     /* fetch inline value */
     ip += CELL;
     xxip = pfa;                   /* fake out the compiler - KLUDGE */
 }
 
+// 174 CODE(drop) {
+CODE(drop) {
+    psp++;
+    xxip = pfa;                   /* fake out the compiler - KLUDGE */
+}
+
+// 510 CODE(cmove) {   /* src dst u -- */
 CODE(cmove) {   /* src dst u -- */
     unsigned char *dst, *src;
     unsigned int u;
@@ -116,10 +122,30 @@ CODE(cmove) {   /* src dst u -- */
     xxip = pfa;                   /* fake out the compiler - KLUDGE */
 }
 
+// 408
+/* BRANCH AND LOOP */
+
+CODE(branch) {     /* Tbranch,-4  loops back to itself */
+    int offset;                 /* Tbranch,+4  is a no-op */
+    offset = *(unsigned int*)ip;     /* fetch inline offset */
+    ip += offset;
+    xxip = pfa;                   /* fake out the compiler - KLUDGE */
+}
+
+// 416
+
+/*
+ * // 620 HIGH LEVEL WORD DEFINITIONS
+ */
+
+// 623 PRIMITIVE(exit);
 PRIMITIVE(exit);
-
+// 625 PRIMITIVE(lit);
 PRIMITIVE(lit);
-
+// 628 PRIMITIVE(drop);
+PRIMITIVE(drop);
+// 684 PRIMITIVE(branch);
+PRIMITIVE(branch);
 // 695 PRIMITIVE(cmove);
 PRIMITIVE(cmove);
 
@@ -140,42 +166,118 @@ THREAD(uinit) = { Fdorom,
     LIT(0),  LIT(0),  ROMDICT, LIT(0) };  // hp lp idp newest
 THREAD(ninit) = { Fdocon, LIT(16*CELL) };
 
-// 869 THREAD(count) = { Fenter, Tdup, Tcharplus, Tswap, Tcfetch, Texit };
+// 869  THREAD(count) = { Fenter, Tdup, Tcharplus, Tswap, Tcfetch, Texit };
+// 872 THREAD(space) = { Fenter, Tlit, LIT(0x20), Temit, Texit };
+THREAD(space) = { Fenter, Tlit, LIT(0x20), // Temit,
+        Tdrop, Texit };
+
+// 1017 extern const void * Tabort[];   /* forward reference */
+extern const void * Tabort[];   /* forward reference */
+
+// 1042 THREAD(quit) = { Fenter, Tl0, Tlp, Tstore,
+THREAD(quit) = { Fenter, // Tl0, Tlp, Tstore,
+        Tspace,
+        // Tr0, Trpstore, Tzero, Tstate, Tstore,
+ /*1*/  // Ttib, Tdup, Ttibsize, Taccept, Tspace, Tinterpret,
+        // Tcr, Tstate, Tfetch, Tzeroequal, Tqbranch, OFFSET(5 /*2*/),
+        // Tlit, okprompt, Ticount, Titype,
+ /*2*/  Tbranch, OFFSET(-2 /*1*/) };     // never exits
+
+// 1049 THREAD(abort) = { Fenter, Ts0, Tspstore, Tquit };
+THREAD(abort) = { Fenter, // Ts0, Tspstore,
+                  Tquit };
+
+const char coldprompt[] = "\042CamelForth in C v0.1 - 14 Feb 2016";
 
 // 1207 THREAD(cold) = { Fenter,
-
-THREAD(cold) = { Fenter, Texit, };
-
-
-
-// interpreter here:
+// THREAD(cold) = { Fenter, Texit, };
+THREAD(cold) = { Fenter, // Texit, };
+    // Tuinit, Tu0, Tninit, Titod,     /* important initialization! */
+    // Tlit, coldprompt, Tcount, Ttype, Tcr,
+    Tabort, };                      /* Tabort never exits */
 
 /*
  * INNER INTERPRETER
  */
 
-const char coldprompt[] = "\042CamelForth in C v0.1 - 14 Feb 2016";
+extern char getKey(void);
+extern uint handled_isr; //  = 0; // serial read UART flag
+
+
+void nop(void) {
+    asm volatile ("nop");
+}
+
+
+int master_char_count = 0;
 
 void interpreter_inner(void) //  'void interpreter(void)' in upstream - restore that later
 {
-    void (*xt)(void *);     /* pointer to code function */
-    void *w, *x;            /* generic pointers */
+    char ch = '\0';
+    int testing = 0;
+    delay(900);
+    ch = getKey();
+    if (ch == 27) { printf(" ESCape! pressed "); }
+
+    // the first char is to be rejected after powering on.
+    if(master_char_count != -411575039) {
+        printf("%c",  ch);
+    /*
+        printf("%c", ' ');
+        printf("%c", '%');
+
+        printf("%c", '\'');
+        printf("%c",  ch);
+        printf("%c", '\'');
+
+        printf("%c", '~');
+        printf("%d",  ch); // 'A' prints as '65' and 'B' as '66' here.
+        printf("%c", '~');
+
+        printf("%c", '%');
+        printf("%c", ' ');
+    */
+    }
+    //  if (1) { printf("%c", ch); }
+
+    handled_isr = 0; // stop assertion it is read
+    // getKey();
+    if (testing) {
+        printf("r"); // getKey() returned
+
+        printf("%c", '>');
+        if (0) { printf("%c", ch); }
+    // ch = '7';
+    }
+    if (testing) {
+        printf("%c", ch);
+        printf("%c", '<');
+        printf("%c", 'P');
+
+        printf("t");
+    }
+
+/*
+    void (*xt)(void *);     // pointer to code function
+    void *w, *x;            // generic pointers
 
     psp = &pstack[PSTACKSIZE-1];
     rsp = &rstack[RSTACKSIZE-1];
     ip = &Tcold;
     ip += CELL;
-    run = 1;                /* set to zero to terminate interpreter */
+    run = 1;                // set to zero to terminate interpreter
+    delay(1500000);
+    printf("last good ghost"); delay(500000);
     while (run) {
-        w = *(void **)ip;       /* fetch word address from thread */
-        ip += CELL;
-        x = *(void **)w;        /* fetch function adrs from word def */
-        xt = (void (*)())x;     /* too much casting! */
+        printf("yyy"); delay(500000);
+        w = *(void **)ip;       // fetch word address from thread
+        ip += CELL; // enough to cause malfunction in this bare-metal version at this stage of development
+        x = *(void **)w;        // fetch function adrs from word def
+        xt = (void (*)())x;     // too much casting!
         w += CELL;
-        (*xt)(w);               /* call function w/adrs of word def */
-        printf("yyy");
-        delay(50000);
+        (*xt)(w);               // call function w/adrs of word def
     }
+*/
 }
 
 
@@ -187,6 +289,16 @@ void interpreter_inner(void) //  'void interpreter(void)' in upstream - restore 
 
 #define NULL 0 // KLUDGE
 const struct Header Hexit = {  NULL, Texit, 0, "\004EXIT"  };
+// 1244 HEADER(lit, execute, 0, "\003lit");
 HEADER(lit, exit, 0, "\003lit");
-HEADER(cold, lit, 0, "\004COLD");
+// 1247 HEADER(drop, qdup, 0, "\004DROP");
+HEADER(drop, lit, 0, "\004DROP");
+// 1402 HEADER(space, cr, 0, "\005SPACE");
+HEADER(space, drop, 0, "\005SPACE");
+// 1439 HEADER(quit, evaluate, 0, "\004QUIT");
+HEADER(quit, space, 0, "\004QUIT");
+// 1440 HEADER(abort, quit, 0, "\005ABORT");
+HEADER(abort, quit, 0, "\005ABORT");
+// 1493 HEADER(cold, words, 0, "\004COLD");
+HEADER(cold, abort, 0, "\004COLD");
 // END.

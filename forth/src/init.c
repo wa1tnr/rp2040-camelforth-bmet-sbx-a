@@ -13,23 +13,114 @@
 //TODO continue at 2.6.3.1, sys.
 // sio.c sio.h rp2040.h OK
 
+#define UNIQUE() printf(" UNIQ 351ca-94c");
+
+uint handled_isr = 0; // serial read UART flag
+extern int master_char_count;
+extern void nop(void);
+
 void delay(int t) {
 	while (t--)
 		asm volatile ("nop");
 }
 
+char* ch_read;
 
-void handler() {
-	char buff[32];
-	memset(buff, 0, 32);
-	uart_read(0, buff, 32);
-	// printf("UART RX: %s\r\n", buff);
-	printf("%s", buff);
+int uart_handler() {
+	char buff[1];
+	memset(buff, 0, 1);
+
+        int length = uart_read(0, buff, 1);
+
+        if (length == 1) {
+            master_char_count++;
+            // strncpy(ch_read, buff, 1);
+            ch_read = buff;
+
+/*
+            printf("%c", ' ');
+            printf("%c", 'Y');
+            printf("%c", 'e');
+            printf("%c", 's');
+            printf("%c", ' ');
+            printf("%c", ' ');
+
+*/
+
+
+            int address_wanted_ch_read = 0;
+            int extra_prints_here = 0;
+
+            // printf("%d", master_char_count);
+
+            if (extra_prints_here) {
+                if(address_wanted_ch_read) {
+                    printf("%d", ch_read);
+                }
+                printf("%c", ' ');
+                printf("%d", master_char_count);
+                printf("%c", ' ');
+                if(master_char_count != -411575039) {
+                    printf("%c", ' ');
+                    printf("%c", '!');
+                    printf("%c", buff[0]);
+                    printf("%c", '!');
+                    printf("%c", ' ');
+                }
+            }
+                // printf("%c", '*');
+                if(master_char_count != -411575039) {
+                    nop(); // printf("%c", *ch_read);
+                }
+                // printf("%c", '*');
+
+/*
+            printf("%c", ' ');
+
+            printf("%c", ' ');
+*/
+
+            return 1;
+        } else {
+            return 0;
+        }
 }
 
-
-
-#define UNIQUE() printf(" UNIQ 327af-32e");
+// if(master_char_count != -411575039) { printf("%c", *ch_read); }
+char getKey(void) {
+    char* ch_returned;
+/*
+    int loop_count = 0;
+    int loop_two_count = 0;
+*/
+    // printf("q");
+    // printf("%c", 'q');
+    // delay(9000);
+    // delay(900);
+    for(;;) {
+        int handled_chars = uart_handler();
+/*
+        loop_count++;
+        // if (loop_count == 955555555) {
+        if (loop_count == 9555) {
+            loop_count = 0;
+            loop_two_count++;
+            if (loop_two_count == 955) {
+                printf("%c", 'W');
+                loop_two_count = 0;
+            }
+        }
+*/
+        if (handled_chars == 1) {
+            // printf("%c", 'G');
+            ch_returned = '\0'; // ch_read;
+            ch_returned = ch_read;
+            char ch_found = *ch_returned;
+            // printf("%c", ch_found);
+            return ch_found;
+        }
+    }
+}
 
 void signon_msg() {
         UNIQUE();
@@ -44,8 +135,9 @@ extern void interpreter_inner(void);
 
 void interpret(void) {
         interpreter_inner();
-        printf("Interpret-AA");
-        delay(2500000);
+        // printf("Interpret-AA");
+        // delay(2500000);
+        // delay(50);
 }
 
 void init() {
@@ -62,16 +154,19 @@ void init() {
 	gpio_dir(0, 1);
 
 	nvic_init();
-	uart_intr_enable(0, 1, 0);
-	nvic_register_irq(IRQ_UART0, handler);
-	nvic_enable(IRQ_UART0);
+	// uart_intr_enable(0, 1, 0);
+	// nvic_register_irq(IRQ_UART0, handler);
+	// nvic_enable(IRQ_UART0);
 
 	systick_init();
 	systick_set(12000000-1);
 
-	signon_msg();
+        // for (int index = 22; index > 0; index--) {
+            signon_msg();
+        // }
 	while(1){
             interpret();
+	    delay(50);
 		// printf("M\r\n");
 		// delay(5000000);
 	}
